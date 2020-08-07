@@ -1,14 +1,21 @@
+import React, { useEffect } from "react";
+import { render } from "@testing-library/react";
 import useDebounce from "../useDebounce";
+
+import axios from "../__mock__/axios";
+
+const TestFC = () => {
+  const debouncedInput = useDebounce("searchtext", 2000);
+  useEffect(() => {
+    axios.get(`/url-can-be-get-post-or-put`);
+  }, [debouncedInput]);
+
+  return <h1>Test Hooks Component</h1>;
+};
+
 describe("How debounce hooks works", () => {
-  const funcObj = {
-    useDebounce: jest.fn(),
-  };
-
-  const useDebounceSpy = jest.spyOn(funcObj, "useDebounce");
   it("executes the hooks", () => {
-    const debouncedInput = useDebounce("searchtext", 2000);
-
-    expect(useDebounceSpy).toHaveBeenCalled();
-    expect(debouncedInput).toBeTruthy();
+    render(<TestFC />);
+    expect(axios.get).toHaveBeenCalled();
   });
 });
